@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <rect width="240" height="240" rx="16" fill="#e6fff5" />
+  <circle cx="120" cy="80" r="42" fill="#26a69a" />
+  <rect x="48" y="140" width="144" height="46" rx="8" fill="#fff7e6" />
+  <text x="120" y="170" font-size="18" fill="#0b74de" font-family="Arial" font-weight="700" text-anchor="middle">Rekha</text>
+</svg>

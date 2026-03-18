@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QuickHire</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/header-styles.css">
+</head>
+<body>
+  <!-- Professional Splash Screen -->
+  <div id="splashScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease, transform 0.6s ease;">
+    <div style="text-align:center;color:white;animation:fadeInUp 0.8s ease-out;">
+      <div style="animation:scaleIn 0.6s ease-out;">
+        <img src="/logo.png" alt="QuickHire" style="height:100px;width:auto;margin-bottom:20px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);animation:float 3s ease-in-out infinite;">
+      </div>
+      <h1 style="font-size:48px;font-weight:800;margin:0 0 12px 0;background:linear-gradient(to right, #ffffff, #ccfbf1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:slideInRight 0.8s ease-out;">QuickHire</h1>
+      <p style="font-size:18px;opacity:0.9;margin:0 0 30px 0;animation:slideInLeft 0.8s ease-out;">Connecting Workers & Clients Seamlessly</p>
+      <div style="display:flex;gap:8px;justify-content:center;animation:fadeIn 1s ease-out 0.5s both;">
+        <div style="width:12px;height:12px;background:white;border-radius:50%;animation:bounce 1s ease-in-out infinite;"></div>
+        <div style="width:12px;height:12px;background:white;border-radius:50%;animation:bounce 1s ease-in-out 0.2s infinite;"></div>
+        <div style="width:12px;height:12px;background:white;border-radius:50%;animation:bounce 1s ease-in-out 0.4s infinite;"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .splash-hidden {
+      opacity: 0 !important;
+      transform: scale(1.1) !important;
+      pointer-events: none !important;
+    }
+  </style>
+
+  <header class="header">
+    <div class="brand">
+      <img src="/logo.png" alt="QuickHire" style="height:48px;width:auto;margin-right:12px;border-radius:8px;">
+      <div class="brand-text">
+        <span class="brand-name" style="font-size:24px;font-weight:700;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">QuickHire</span>
+        <p style="margin:0;font-size:11px;color:#64748b;font-weight:500;">Trusted Skilled Worker Booking Platform</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <select id="langSelect" style="padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-weight:500;color:#0f172a;cursor:pointer;background:white;">
+        <option value="hi">हिन्दी</option>
+        <option value="en">English</option>
+        <option value="mr">मराठी</option>
+        <option value="ta">தமிழ்</option>
+        <option value="ml">മലയാളം</option>
+      </select>
+      <button id="darkModeToggle" style="padding:6px 10px;background:white;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer;font-size:16px;transition:all 0.3s;" title="Toggle Dark Mode">☀️</button>
+      <button id="clientModeBtn" class="mode-btn active" style="padding:8px 16px;background:#06b6d4;color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:13px;display:none;">👥 Client</button>
+      <button id="workerModeBtn" class="mode-btn" style="padding:8px 16px;background:#64748b;color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:13px;display:none;">🔧 Worker</button>
+      
+      <!-- Profile Dropdown (shown when logged in) -->
+      <div id="profileDropdown" style="position:relative;display:none;">
+        <button id="profileBtn" style="padding:8px 12px;background:#0f766e;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:13px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">👤</span>
+          <span id="profileUserName">Profile</span>
+          <span style="font-size:10px;">▼</span>
+        </button>
+        <div id="profileMenu" style="display:none;position:absolute;top:100%;right:0;margin-top:8px;background:white;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:200px;z-index:1000;">
+          <a href="#" id="viewProfileLink" style="display:block;padding:12px 16px;color:#0f172a;text-decoration:none;border-bottom:1px solid #f1f5f9;transition:background 0.2s;">
+            <span style="font-size:16px;margin-right:8px;">📋</span> View Profile
+          </a>
+          <a href="#" id="editProfileLink" style="display:block;padding:12px 16px;color:#0f172a;text-decoration:none;border-bottom:1px solid #f1f5f9;transition:background 0.2s;">
+            <span style="font-size:16px;margin-right:8px;">✏️</span> Edit Profile
+          </a>
+          <a href="#" id="myPostsLink" style="display:block;padding:12px 16px;color:#0f172a;text-decoration:none;border-bottom:1px solid #f1f5f9;transition:background 0.2s;">
+            <span style="font-size:16px;margin-right:8px;">📝</span> My Posts
+          </a>
+          <a href="#" id="logoutLink" style="display:block;padding:12px 16px;color:#ef4444;text-decoration:none;transition:background 0.2s;font-weight:600;">
+            <span style="font-size:16px;margin-right:8px;">🚪</span> Logout
+          </a>
+        </div>
+      </div>
+      
+      <button id="loginBtn" style="padding:8px 16px;background:#0f766e;color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:13px;">Login</button>
+      <button id="registerBtn" style="padding:8px 16px;background:#14b8a6;color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:13px;">Register</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" style="background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);padding:50px 40px;border-radius:20px;color:white;box-shadow:0 20px 40px rgba(15,118,110,0.2);margin-bottom:40px;">
+      <h2 id="heroTitle" style="font-size:36px;font-weight:700;margin:0 0 12px 0;line-height:1.3;">Connect with Skilled Workers Instantly 🚀</h2>
+      <p id="heroDesc" style="font-size:16px;opacity:0.95;line-height:1.6;max-width:700px;margin:0 auto 20px auto;">Find trusted plumbers, electricians, painters and helpers nearby. Record a short voice resume, verify your ID and get hired locally in minutes.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;justify-content:center;">
+        <div style="background:rgba(255,255,255,0.15);padding:12px 20px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
+          <div style="font-size:20px;font-weight:700;">1000+</div>
+          <div style="font-size:13px;opacity:0.9;">Active Workers</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);padding:12px 20px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
+          <div style="font-size:20px;font-weight:700;">500+</div>
+          <div style="font-size:13px;opacity:0.9;">Jobs Posted</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);padding:12px 20px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
+          <div style="font-size:20px;font-weight:700;">98%</div>
+          <div style="font-size:13px;opacity:0.9;">Satisfaction Rate</div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Professional Service Categories - Only visible in Client mode -->
+    <section id="categoriesSection" style="margin-bottom:50px;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <p style="color:#f97316;font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px 0;">Everything You Need, All In One Place</p>
+        <h2 style="margin:0;font-size:32px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">SERVICE CATEGORIES</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;">
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('plumber')">
+          <div style="font-size:36px;margin-bottom:8px;">🔧</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Plumber</h4>
+        </div>
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('electrician')">
+          <div style="font-size:36px;margin-bottom:8px;">⚡</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Electrician</h4>
+        </div>
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('carpenter')">
+          <div style="font-size:36px;margin-bottom:8px;">🪚</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Carpenter</h4>
+        </div>
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('painter')">
+          <div style="font-size:36px;margin-bottom:8px;">🎨</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Painter</h4>
+        </div>
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('cleaner')">
+          <div style="font-size:36px;margin-bottom:8px;">🧹</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Cleaning</h4>
+        </div>
+        <div class="category-card" style="background:white;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid #e2e8f0;" onclick="filterBySkill('')">
+          <div style="font-size:36px;margin-bottom:8px;">👷</div>
+          <h4 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">All Services</h4>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div id="clientPanel" class="control-card">
+        <h4 style="color:#0f766e;font-size:20px;font-weight:700;border-bottom:3px solid #14b8a6;padding-bottom:8px;margin-bottom:16px;">📋 Client Dashboard</h4>
+        <div style="margin-bottom:10px">
+          <strong>Post a Job</strong>
+          <div style="margin-top:8px;color:var(--muted);font-size:13px">Describe what work you need done, and workers will be notified.</div>
+        </div>
+        <textarea id="jobDescription" placeholder="Describe the job (e.g., Fix bathroom tap, paint bedroom...)" rows="3" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:8px"></textarea>
+        <button id="postJob" class="button-primary">Post Job</button>
+        <div style="margin-top:12px">
+          <h5 id="emergencyTitle" style="margin:0 0 6px 0">Emergency Request</h5>
+          <button id="postEmergency" class="button-accent" style="width:100%;padding:10px">🚨 Emergency Request</button>
+          <div style="color:var(--muted);font-size:13px">Sends an urgent request to nearby workers.</div>
+        </div>
+        <div style="margin-top:12px">
+          <h5 style="margin:0 0 6px 0">Your Jobs</h5>
+          <div id="jobsList" style="display:block;gap:8px"></div>
+        </div>
+      </div>
+      <div id="workerPanel" class="control-card panel-hidden">
+        <h4 style="color:#f97316;font-size:20px;font-weight:700;border-bottom:3px solid #fb923c;padding-bottom:8px;margin-bottom:16px;">🔧 Labour Dashboard</h4>
+        <div style="margin-bottom:10px">
+          <strong>Your Profile</strong>
+          <div style="margin-top:8px;color:var(--muted);font-size:13px">Upload your photo, add skills and verify your ID to increase trust.</div>
+        </div>
+        <div id="voicePanel">
+          <h5 style="margin:0 0 6px 0">Voice Resume</h5>
+          <button id="recordVoice" class="button-primary">Start Recording</button>
+          <span id="recordTimer" style="margin-left:10px;color:var(--muted)">00:00</span>
+          <div id="voiceActions" style="margin-top:8px;display:none">
+            <audio id="voicePreview" controls style="width:100%"></audio>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <input id="voiceName" class="input" placeholder="Your Name *" style="width:100%" />
+              <input id="voiceSkill" class="input" placeholder="Your Work/Skill (e.g., Plumber, Electrician) *" style="width:100%" />
+              <input id="voicePhone" class="input" placeholder="Mobile Number *" style="width:100%" />
+              <div style="display:flex;gap:8px">
+                <button id="uploadVoiceBtn" class="button-primary" style="flex:1">Upload Voice Resume</button>
+                <button id="deleteVoiceBtn" class="input">Delete</button>
+              </div>
+            </div>
+            <progress id="voiceProgress" value="0" max="100" style="width:100%;display:none;margin-top:8px"></progress>
+            <div id="voiceStatus" style="margin-top:6px;color:var(--muted)"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <h5 style="margin:0 0 6px 0">ID Upload</h5>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="uploadId" class="button-primary">Upload ID (Aadhaar/PAN)</button>
+            <div id="idPreviewMini" style="color:var(--muted);font-size:13px"></div>
+          </div>
+          </div>
+          <div style="margin-top:12px">
+            <h5 style="margin:0 0 6px 0">Available Jobs</h5>
+            <div id="jobsForWorker" style="display:block;gap:8px"></div>
+          </div>
+      </div>
+    </section>
+
+    <section id="workers-section" style="margin-top:60px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin:0 0 8px 0;font-size:32px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">Most Booked Services</h2>
+          <p style="margin:0;font-size:15px;color:#64748b;font-weight:500;">Trusted professionals with verified ratings</p>
+        </div>
+        <button id="findNearbyWorkers" class="button-primary" style="padding:10px 20px;background:#0f766e;border:none;border-radius:8px;font-weight:600;box-shadow:0 2px 8px rgba(15,118,110,0.2);">📍 Find Nearby</button>
+      </div>
+      <div id="workers"></div>
+    </section>
+
+    <div class="site-footer" style="margin-top:80px;padding:50px 30px;background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%);border-radius:24px;color:#e2e8f0;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;margin-bottom:30px;">
+        <div>
+          <h3 style="margin:0 0 16px 0;font-size:20px;font-weight:700;color:white;">QuickHire</h3>
+          <p style="margin:0 0 12px 0;font-size:14px;line-height:1.6;">Connecting skilled workers with clients seamlessly. Professional home services at your doorstep.</p>
+          <div style="display:flex;gap:12px;margin-top:16px;">
+            <a href="#" style="width:40px;height:40px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;">📱</a>
+            <a href="#" style="width:40px;height:40px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;">🌐</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:white;">For Customers</h4>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">Browse Services</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">How it Works</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">Reviews</a></p>
+        </div>
+        <div>
+          <h4 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:white;">For Workers</h4>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">Register as Professional</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">Worker Benefits</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;"><a href="#" style="color:#e2e8f0;text-decoration:none;">Success Stories</a></p>
+        </div>
+        <div>
+          <h4 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:white;">Customer Care</h4>
+          <p style="margin:0 0 8px 0;font-size:14px;display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">📞</span> <a href="tel:+911234567890" style="color:#e2e8f0;text-decoration:none;">+91 123-456-7890</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">✉️</span> <a href="mailto:support@quickhire.com" style="color:#e2e8f0;text-decoration:none;">support@quickhire.com</a></p>
+          <p style="margin:0 0 8px 0;font-size:14px;display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">🕒</span> <span style="color:#e2e8f0;">Mon-Sat: 9AM-8PM</span></p>
+          <button onclick="window.location.href='#contact'" style="margin-top:12px;padding:10px 20px;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Contact Support</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;text-align:center;">
+        <p style="margin:0 0 8px 0;font-weight:600;font-size:14px;color:#94a3b8;">Made by Shreyansh Dixit, Shivans Singh, Asmit Singh, Harsh Bardhan, Khushi</p>
+        <p style="margin:0;font-size:13px;color:#64748b;">© 2025 QuickHire. All rights reserved.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Simple modals and admin link -->
+  <div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center">
+    <div style="background:white;padding:16px;border-radius:8px;max-width:420px;width:90%" id="modalContent"></div>
+  </div>
+
+  <!-- Voice Assistant Button -->
+  <button id="voiceAssistantBtn" style="position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);border:none;color:white;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(15,118,110,0.4);z-index:999;transition:all 0.3s ease;" title="Voice Assistant - Click and speak">
+    🎤
+  </button>
+  <div id="voiceAssistantPanel" style="display:none;position:fixed;bottom:90px;right:20px;width:320px;background:white;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.15);padding:20px;z-index:999;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h4 style="margin:0;color:#0f766e;font-size:16px;">🤖 Voice Assistant</h4>
+      <button id="closeAssistant" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;">×</button>
+    </div>
+    <div id="assistantStatus" style="padding:12px;background:#f1f5f9;border-radius:8px;margin-bottom:12px;font-size:13px;color:#64748b;">
+      Speak or type your command below
+    </div>
+    
+    <!-- Text Input Alternative -->
+    <div style="margin-bottom:12px;">
+      <input type="text" id="voiceTextInput" placeholder="Type command: find plumber, post job, etc..." style="width:100%;padding:10px;border:2px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box;margin-bottom:8px;" />
+      <button id="sendTextCommand" style="width:100%;padding:10px;background:#0f766e;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">✓ Send Command</button>
+    </div>
+    
+    <div style="text-align:center;margin:12px 0;color:#94a3b8;font-size:11px;font-weight:600;">OR</div>
+    
+    <button id="startListeningBtn" style="width:100%;padding:12px;background:linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      🎤 Start Listening
+    </button>
+    <div id="voiceCommandArea" style="display:none;margin-bottom:12px;">
+      <div style="padding:10px;background:#f8fafc;border:2px solid #14b8a6;border-radius:8px;margin-bottom:8px;">
+        <div style="font-size:11px;color:#64748b;margin-bottom:4px;font-weight:600;">You said:</div>
+        <div id="voiceTranscript" style="font-size:13px;color:#0f172a;font-weight:500;"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="sendVoiceCommand" style="flex:1;padding:10px;background:#0f766e;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">✓ Send Command</button>
+        <button id="cancelVoiceCommand" style="padding:10px 16px;background:#64748b;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">✗</button>
+      </div>
+    </div>
+    <div id="assistantSuggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+      <button class="suggestion-btn" data-command="find plumber" style="padding:6px 12px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:6px;font-size:11px;cursor:pointer;color:#0369a1;">Find Plumber</button>
+      <button class="suggestion-btn" data-command="post job" style="padding:6px 12px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;font-size:11px;cursor:pointer;color:#92400e;">Post Job</button>
+      <button class="suggestion-btn" data-command="register" style="padding:6px 12px;background:#ddd6fe;border:1px solid #c4b5fd;border-radius:6px;font-size:11px;cursor:pointer;color:#5b21b6;">Register</button>
+      <button class="suggestion-btn" data-command="show workers" style="padding:6px 12px;background:#d1fae5;border:1px solid #a7f3d0;border-radius:6px;font-size:11px;cursor:pointer;color:#065f46;">Show Workers</button>
+    </div>
+    <div style="font-size:11px;color:#94a3b8;line-height:1.4;">
+      <strong>Try saying:</strong> "Find plumber", "Post job", "Register as worker", "Show nearby workers", "Login"
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

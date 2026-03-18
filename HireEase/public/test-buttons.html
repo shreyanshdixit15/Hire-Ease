@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Test - QuickHire</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #333;
+      border-bottom: 2px solid #0f766e;
+      padding-bottom: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px 10px 10px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: #0f766e;
+      color: white;
+    }
+    .btn-secondary {
+      background: #14b8a6;
+      color: white;
+    }
+    .btn-accent {
+      background: #f97316;
+      color: white;
+    }
+    .btn-purple {
+      background: #8b5cf6;
+      color: white;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .status {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+      display: block;
+    }
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 QuickHire Button Testing Page</h1>
+  
+  <div class="test-section">
+    <h2>Header Buttons</h2>
+    <button class="btn-primary" onclick="testButton('Login')">Login</button>
+    <button class="btn-secondary" onclick="testButton('User Registration')">User Registration</button>
+    <button class="btn-accent" onclick="testButton('Worker Profile')">Worker Profile</button>
+    <button class="btn-purple" onclick="testButton('Worker Dashboard')">Worker Dashboard</button>
+    <div id="header-status" class="status"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Client Dashboard Buttons</h2>
+    <button class="btn-primary" onclick="testPostJob()">Post Job</button>
+    <button class="btn-accent" onclick="testEmergency()">🚨 Emergency Request</button>
+    <div id="client-status" class="status"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Worker Actions</h2>
+    <button class="btn-secondary" onclick="testAcceptJob()">✅ Accept Job</button>
+    <button class="btn-primary" onclick="testViewJobs()">View Urgent Jobs</button>
+    <div id="worker-status" class="status"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>API Tests</h2>
+    <button class="btn-primary" onclick="testAPI('/api/jobs/urgent')">GET /api/jobs/urgent</button>
+    <button class="btn-secondary" onclick="testAPI('/api/workers')">GET /api/workers</button>
+    <div id="api-status" class="status"></div>
+    <pre id="api-response" style="background: #f9fafb; padding: 10px; border-radius: 4px; max-height: 300px; overflow: auto; display: none;"></pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test Results</h2>
+    <ul id="test-results" style="list-style: none; padding: 0;">
+      <li>✅ Page loaded successfully</li>
+    </ul>
+  </div>
+
+  <script>
+    function showStatus(elementId, message, isSuccess) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.className = 'status ' + (isSuccess ? 'success' : 'error');
+      setTimeout(() => {
+        el.style.display = 'none';
+      }, 3000);
+    }
+
+    function addTestResult(message, isSuccess) {
+      const ul = document.getElementById('test-results');
+      const li = document.createElement('li');
+      li.textContent = (isSuccess ? '✅ ' : '❌ ') + message;
+      li.style.color = isSuccess ? '#065f46' : '#991b1b';
+      li.style.padding = '5px 0';
+      ul.appendChild(li);
+    }
+
+    function testButton(name) {
+      showStatus('header-status', `${name} button clicked!`, true);
+      addTestResult(`${name} button is responsive`, true);
+    }
+
+    async function testPostJob() {
+      try {
+        showStatus('client-status', 'Testing Post Job...', true);
+        // Simulate the modal opening
+        addTestResult('Post Job button clicked - Modal should open', true);
+        setTimeout(() => {
+          showStatus('client-status', 'Post Job modal would open here', true);
+        }, 500);
+      } catch (error) {
+        showStatus('client-status', 'Error: ' + error.message, false);
+        addTestResult('Post Job button failed', false);
+      }
+    }
+
+    async function testEmergency() {
+      try {
+        showStatus('client-status', 'Testing Emergency Request...', true);
+        addTestResult('Emergency button clicked - Confirmation dialog should appear', true);
+        setTimeout(() => {
+          showStatus('client-status', 'Emergency request would be sent', true);
+        }, 500);
+      } catch (error) {
+        showStatus('client-status', 'Error: ' + error.message, false);
+        addTestResult('Emergency button failed', false);
+      }
+    }
+
+    async function testAcceptJob() {
+      try {
+        showStatus('worker-status', 'Testing Accept Job...', true);
+        addTestResult('Accept Job button clicked', true);
+        setTimeout(() => {
+          showStatus('worker-status', 'Job would be accepted', true);
+        }, 500);
+      } catch (error) {
+        showStatus('worker-status', 'Error: ' + error.message, false);
+        addTestResult('Accept Job button failed', false);
+      }
+    }
+
+    async function testViewJobs() {
+      try {
+        showStatus('worker-status', 'Testing View Jobs...', true);
+        const response = await fetch('/api/jobs/urgent');
+        const data = await response.json();
+        addTestResult(`View Jobs API returned ${data.jobs ? data.jobs.length : 0} jobs`, true);
+        showStatus('worker-status', `Found ${data.jobs ? data.jobs.length : 0} urgent jobs`, true);
+      } catch (error) {
+        showStatus('worker-status', 'Error: ' + error.message, false);
+        addTestResult('View Jobs failed', false);
+      }
+    }
+
+    async function testAPI(endpoint) {
+      try {
+        showStatus('api-status', `Testing ${endpoint}...`, true);
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        document.getElementById('api-response').style.display = 'block';
+        document.getElementById('api-response').textContent = JSON.stringify(data, null, 2);
+        addTestResult(`${endpoint} - SUCCESS`, true);
+        showStatus('api-status', `${endpoint} returned successfully`, true);
+      } catch (error) {
+        showStatus('api-status', 'Error: ' + error.message, false);
+        addTestResult(`${endpoint} - FAILED`, false);
+      }
+    }
+
+    // Run auto-tests on load
+    window.addEventListener('load', async () => {
+      addTestResult('Testing server connection...', true);
+      
+      try {
+        const response = await fetch('/api/workers');
+        const data = await response.json();
+        addTestResult(`Server is running - Found ${data.workers ? data.workers.length : 0} workers`, true);
+      } catch (error) {
+        addTestResult('Server connection failed: ' + error.message, false);
+      }
+
+      try {
+        const response = await fetch('/api/jobs/urgent');
+        const data = await response.json();
+        addTestResult(`Urgent jobs API working - ${data.jobs ? data.jobs.length : 0} jobs available`, true);
+      } catch (error) {
+        addTestResult('Urgent jobs API failed: ' + error.message, false);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "msedge",
+            "name": "Launch QuickHire (local)",
+            "request": "launch",
+            "url": "http://127.0.0.1:3000/public/index.html"
+        }
+    ]
+}
