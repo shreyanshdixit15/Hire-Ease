@@ -59,7 +59,8 @@ A lightweight, mobile-first platform designed to connect local labour with emplo
 
 ## 👥 Contributors
 
-Made with ❤️ by:
+Made with  by:
 - **Shreyansh Dixit**
-- **Sargun Kaur**
-- **Shivans Singh**
+- **Khushi **
+- **Asmit singh**
+- **Harsh Bardhan**
