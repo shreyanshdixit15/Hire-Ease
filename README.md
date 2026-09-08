@@ -61,6 +61,6 @@ A lightweight, mobile-first platform designed to connect local labour with emplo
 
 Made with  by:
 - **Shreyansh Dixit**
-- **Khushi **
+- **Khushi**
 - **Asmit singh**
 - **Harsh Bardhan**
